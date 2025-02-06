@@ -1,0 +1,24 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: shiqi
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: express-lambda
+service: my-typescript-express-lambda2
+
+provider:
+  name: aws
+  runtime: nodejs22.x # Adjust as needed
+  stage: dev
+  region: us-east-1 # Adjust as needed
+
+plugins:
+  - serverless-dotenv-plugin
+
+functions:
+  api:
+    handler: dist/server.handler
+    environment:
+      TOKEN_SECRET: ${env:TOKEN_SECRET}
+      S3_NAME_FOR_UPLOADS_FILES: ${env:S3_NAME_FOR_UPLOADS_FILES}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
